@@ -2,8 +2,12 @@
 
 use Illuminate\Support\Str;
 
-$DATABASE_URL=parse_url('DATABASE_URL');
+$DATABASE_URL=parse_url(env('DATABASE_URL',''));
+$parsedUrl = $DATABASE_URL ? parse_url($DATABASE_URL) : null;
 
+if ($DATABASE_URL) {
+    error_log('DATABASE_URL: ' . $DATABASE_URL);
+}
 return [
 
     /*
@@ -62,7 +66,7 @@ return [
         ],
 
         'mariadb' => [
-            'driver' => 'mariadb',
+            'driver' => 'pgsql',
             'url' => env('DB_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
@@ -90,6 +94,7 @@ return [
             'username' => $DATABASE_URL['user'],
             'password' => $DATABASE_URL['pass'],
             'charset' => env('DB_CHARSET', 'utf8'),
+            'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
             'search_path' => 'public',
